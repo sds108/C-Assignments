@@ -16,7 +16,7 @@ Compile command:
 gcc a0p2.c -o t2
 
 Run command:
-./t2
+./t2 pokemon.csv
 
 ## Part 4
 What is the average attack strength of a character?
