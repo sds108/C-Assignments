@@ -17,8 +17,8 @@
 // one here. If you can, try using a hashTable as a variable, passing it as a 
 // parameter to functions!
 
-#define MAX_STRING_SIZE 200 //max length of a string
-#define ARRAY_SIZE 99991 //best be prime
+#define MAX_STRING_SIZE 60 //max length of a string
+#define ARRAY_SIZE 17491 //best be prime
 #define NAME_PROMPT "Enter term to get frequency or type \"quit\" to escape\n>>> " //you can use this string as your invitation to the user
 #define NEW_LINE_PROMPT ">>> " //you can use this string as your invitation to the user where the user should input the name
 
@@ -44,25 +44,6 @@ Element* hashTable[ARRAY_SIZE];
 int collisions = 0;
 int num_terms = 0;
 
-/*
-int hash_function (char* s) {
-    int hash = 0;
-    while (*s) {
-    	hash = (hash + *s - 'A') % ARRAY_SIZE;
-    	s++;
-    }
-    return hash;
-}
-
-int hash3 (char* s){
-	int hash = 0;
-	while(*s){
-		hash = 1 + (hash + *s -'A') % (ARRAY_SIZE - 1);
-		s++;
-	}
-	return hash;
-}
-*/
 
 long long hash_function (char* s) {
 	unsigned long long hash = 181243; // 181243 very good
@@ -79,7 +60,7 @@ long long hash_function (char* s) {
 }
 
 long long hash3 (char* s) {
-	unsigned long long hash = 4273; // 181243 very good
+	unsigned long long hash = 4273; // 4273 also very good
 	unsigned long long multiplier = 47; // 47 very good
 	
 	while (*s) {
@@ -114,15 +95,6 @@ Element* createNewElement (Element* parent, int person_id, char* deposition_id, 
 
 void addElement (Element** head, int person_id, char* deposition_id, char* surname, char* name, int age, char* person_type, char* gender, char* nationality, char* religion, char* occupation) {
 	Element* newNode = createNewElement(*head, person_id, deposition_id, surname, name, age, person_type, gender, nationality, religion, occupation);
-	/*
-	Element* newNode = (struct Node*)malloc(sizeof(struct Node));
-	
-	(*newNode).name = data;
-	
-	(*newNode).previous = NULL;
-	
-	(*newNode).next = *head;
-	*/
 	
 	if (*head != NULL) (**head).previous = newNode;
 	
@@ -135,12 +107,8 @@ int search (char* surname) {
 	long long jump_hash = hash3(surname);
 	long long temp = 0;
 	
-	//printf("%s\n", surname);
-	
     for (int i = 0; i < ARRAY_SIZE; i++) {
-		///*
 		temp = abs(((i * jump_hash) + initial) % ARRAY_SIZE);
-		//printf("index %i jump %i init %i\n", temp, jump_hash, initial);
 		
 		if (hashTable[temp] != NULL) {
 			if (hashTable[temp]->surname != NULL && surname != NULL) {
@@ -149,29 +117,6 @@ int search (char* surname) {
 				}
 			}
 		}
-		//*/
-		
-		/*
-		match = true;
-		if (hashTable[((i * jump_hash) + initial) % ARRAY_SIZE] != NULL) {
-			for (int c = 0; c < MAX_STRING_SIZE; c++) {
-				//printf("%c\n", surname[c]);
-				//printf("%c\n", hashTable[((i * jump_hash) + initial) % ARRAY_SIZE]->surname[c]);
-				if (hashTable[((i * jump_hash) + initial) % ARRAY_SIZE]->surname != NULL && surname != NULL) {
-					if (surname[c] != NULL && hashTable[((i * jump_hash) + initial) % ARRAY_SIZE]->surname[c] != NULL) {
-						if (surname[c] != hashTable[((i * jump_hash) + initial) % ARRAY_SIZE]->surname[c]) {
-							match = false;
-							break;
-						}
-						
-						if (surname[c] == '\0') break;
-					} else printf("NULL ERROR\n");
-				}
-			}
-			
-			if (match) return ((i * jump_hash) + initial) % ARRAY_SIZE;
-		}
-		//*/
 	}
     return -1;
 }
@@ -223,246 +168,6 @@ void addOrIncrement (int person_id, char* deposition_id, char* surname, char* na
 	
 	if (index >= 0) addElement(&hashTable[index], person_id, deposition_id, surname, name, age, person_type, gender, nationality, religion, occupation);
 	else insert(person_id, deposition_id, surname, name, age, person_type, gender, nationality, religion, occupation);
-}
-
-
-
-// From assignment 0
-// Reads strings of alpha numeric characters from input file. Truncates strings which are too long to string_max-1
-void next_tokenfggrf ( char *buf, FILE *f, int string_max ) {
-	// start by skipping any characters we're not interested in
-	buf[0] = fgetc(f);
-	while ( !isalnum(buf[0]) && !feof(f) ) { buf[0] = fgetc(f); }
-	// read string of alphanumeric characters
-	int i=1;
-	for (;;) {
-		buf[i] = fgetc(f);                // get next character from file
-		if( !isalnum(buf[i]) ) { 
-            if(buf[i]!=' '){ // we still want to keep spaces
-                break; // only load letters and numbers
-            }
-        } 
-		if( feof(f) ) { break; }          // file ended?
-		if( i < (string_max-1) ) { ++i; } // truncate strings that are too long
-	}
-	buf[i] = '\0'; // NULL terminate the string
-}
-			
-void next_tokenfhgj (char* buffer, FILE* csv, int max_len) {
-	int c;
-	int n = 0;
-	
-	while (1) {
-		c = fgetc(csv);
-		
-		printf("c == %d\n", c);
-		
-		// Switch because this is killing me
-		if (c == EOF) {
-			buffer[n] = '\0';
-			return;
-		}
-		
-		switch (c) {
-			case 10:
-				buffer[n] = '\0';
-				return;
-			case 44:
-				buffer[n] = '\0';
-				return;
-			case 32:
-				buffer[n] = c;
-				n++;
-			case 48:
-				buffer[n] = c;
-				n++;
-			case 49:
-				buffer[n] = c;
-				n++;
-			case 50:
-				buffer[n] = c;
-				n++;
-			case 51:
-				buffer[n] = c;
-				n++;
-			case 52:
-				buffer[n] = c;
-				n++;
-			case 53:
-				buffer[n] = c;
-				n++;
-			case 54:
-				buffer[n] = c;
-				n++;
-			case 55:
-				buffer[n] = c;
-				n++;
-			case 56:
-				buffer[n] = c;
-				n++;
-			case 57:
-				buffer[n] = c;
-				n++;
-			case 65:
-				buffer[n] = c;
-				n++;
-			case 66:
-				buffer[n] = c;
-				n++;
-			case 67:
-				buffer[n] = c;
-				n++;
-			case 68:
-				buffer[n] = c;
-				n++;
-			case 69:
-				buffer[n] = c;
-				n++;
-			case 70:
-				buffer[n] = c;
-				n++;
-			case 71:
-				buffer[n] = c;
-				n++;
-			case 72:
-				buffer[n] = c;
-				n++;
-			case 73:
-				buffer[n] = c;
-				n++;
-			case 74:
-				buffer[n] = c;
-				n++;
-			case 75:
-				buffer[n] = c;
-				n++;
-			case 76:
-				buffer[n] = c;
-				n++;
-			case 77:
-				buffer[n] = c;
-				n++;
-			case 78:
-				buffer[n] = c;
-				n++;
-			case 79:
-				buffer[n] = c;
-				n++;
-			case 80:
-				buffer[n] = c;
-				n++;
-			case 81:
-				buffer[n] = c;
-				n++;
-			case 82:
-				buffer[n] = c;
-				n++;
-			case 83:
-				buffer[n] = c;
-				n++;
-			case 84:
-				buffer[n] = c;
-				n++;
-			case 85:
-				buffer[n] = c;
-				n++;
-			case 86:
-				buffer[n] = c;
-				n++;
-			case 87:
-				buffer[n] = c;
-				n++;
-			case 88:
-				buffer[n] = c;
-				n++;
-			case 89:
-				buffer[n] = c;
-				n++;
-			case 90:
-				buffer[n] = c;
-				n++;
-			case 97:
-				buffer[n] = c;
-				n++;
-			case 98:
-				buffer[n] = c;
-				n++;
-			case 99:
-				buffer[n] = c;
-				n++;
-			case 100:
-				buffer[n] = c;
-				n++;
-			case 101:
-				buffer[n] = c;
-				n++;
-			case 102:
-				buffer[n] = c;
-				n++;
-			case 103:
-				buffer[n] = c;
-				n++;
-			case 104:
-				buffer[n] = c;
-				n++;
-			case 105:
-				buffer[n] = c;
-				n++;
-			case 106:
-				buffer[n] = c;
-				n++;
-			case 107:
-				buffer[n] = c;
-				n++;
-			case 108:
-				buffer[n] = c;
-				n++;
-			case 109:
-				buffer[n] = c;
-				n++;
-			case 110:
-				buffer[n] = c;
-				n++;
-			case 111:
-				buffer[n] = c;
-				n++;
-			case 112:
-				buffer[n] = c;
-				n++;
-			case 113:
-				buffer[n] = c;
-				n++;
-			case 114:
-				buffer[n] = c;
-				n++;
-			case 115:
-				buffer[n] = c;
-				n++;
-			case 116:
-				buffer[n] = c;
-				n++;
-			case 117:
-				buffer[n] = c;
-				n++;
-			case 118:
-				buffer[n] = c;
-				n++;
-			case 119:
-				buffer[n] = c;
-				n++;
-			case 120:
-				buffer[n] = c;
-				n++;
-			case 121:
-				buffer[n] = c;
-				n++;
-			case 122:
-				buffer[n] = c;
-				n++;
-		}
-		
-		if (n + 1 >= max_len) break;
-	}
 }
 
 void next_token (char* buffer, FILE* csv, int max_len) {
@@ -662,12 +367,10 @@ int main ( int argc, char *argv[] ) {
     
 	load_file(argv[argc-1]);
 	
-	//printArray();
 	printf(NAME_PROMPT);
 	
 	while (1) {
 		scanf("%[^\n]%*c", input);
-		//fgets(input, MAX_STRING_SIZE, stdin);
 		if (quit(input)) {
 			clearMemory();
 			break;
