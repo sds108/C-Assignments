@@ -1,100 +1,96 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-
-// Part 4
+#include <stdlib.h>
 
 #define MAX_LEN 1000
 
 int next_field(FILE *csv, char *buffer, int max_len);
 
 struct pokemon {
-	int number;
+	int number, Total, HP, Attack, Defense, SpAtk, SpDef, Speed, Generation;
 	char name[MAX_LEN];
 	char type1[MAX_LEN];
 	char type2[MAX_LEN];
-	int Total;
-	int HP;
-	int Attack;
-	int Defense;
-	int SpAtk;
-	int SpDef;
-	int Speed;
-	int Generation;
 	char Legendary[MAX_LEN];
 	char PokedexEntry[MAX_LEN];
 };
 
 struct pokemon pokedex[1000];
 
-int main () {
+int main (int arguments, char* arg[]) {
 	
 	char buffer[MAX_LEN];
 	
 	FILE *file;
 	
-	file = fopen("pokemon.csv", "r");
+	file = fopen(arg[1], "r");
 	
-	int lineCounter = -1;
-	int paramCounter = 0;
+	int lineCounter = -1, paramCounter = 0;
 	
-	// Read out the file
 	while (!feof(file)) {
 		if (next_field(file, &buffer[0], MAX_LEN) && !feof(file)) {
 			if (lineCounter >= 0) {
-				memcpy(buffer, pokedex[lineCounter].PokedexEntry, sizeof pokedex[lineCounter].PokedexEntry);
+				memcpy(pokedex[lineCounter].PokedexEntry, buffer, MAX_LEN);
 			}
 			lineCounter++;
 			paramCounter = 0;
 		} else {
-			switch (paramCounter) {
-				case 0: {
-					pokedex[lineCounter].number = atoi(buffer);
-				}
-				case 1: {
-					memcpy(buffer, pokedex[lineCounter].name, sizeof pokedex[lineCounter].name);
-					//pokedex[lineCounter].name = buffer;
-				}
-				case 2: {
-					memcpy(buffer, pokedex[lineCounter].type1, sizeof pokedex[lineCounter].type1);
-					//pokedex[lineCounter].type1 = buffer;
-				}
-				case 3: {
-					memcpy(buffer, pokedex[lineCounter].type2, sizeof pokedex[lineCounter].type2);
-					//pokedex[lineCounter].type2 = buffer;
-				}
-				case 4: {
-					pokedex[lineCounter].Total = atoi(buffer);
-				}
-				case 5: {
-					pokedex[lineCounter].HP = atoi(buffer);
-				}
-				case 6: {
-					pokedex[lineCounter].Attack = atoi(buffer);
-				}
-				case 7: {
-					pokedex[lineCounter].Defense = atoi(buffer);
-				}
-				case 8: {
-					pokedex[lineCounter].SpAtk = atoi(buffer);
-				}
-				case 9: {
-					pokedex[lineCounter].SpDef = atoi(buffer);
-				}
-				case 10: {
-					pokedex[lineCounter].Speed = atoi(buffer);
-				}
-				case 11: {
-					pokedex[lineCounter].Generation = atoi(buffer);
-				}
-				case 12: {
-					memcpy(buffer, pokedex[lineCounter].Legendary, sizeof pokedex[lineCounter].Legendary);
-					//pokedex[lineCounter].Legendary = buffer;
+			if (lineCounter >= 0) {
+				switch (paramCounter) {
+					case 0: {
+						pokedex[lineCounter].number = atoi(buffer);
+					}
+					case 1: {
+						memcpy(pokedex[lineCounter].name, buffer, MAX_LEN);
+					}
+					case 2: {
+						memcpy(pokedex[lineCounter].type1, buffer, MAX_LEN);
+					}
+					case 3: {
+						memcpy(pokedex[lineCounter].type2, buffer, MAX_LEN);
+					}
+					case 4: {
+						pokedex[lineCounter].Total = atoi(buffer);
+					}
+					case 5: {
+						pokedex[lineCounter].HP = atoi(buffer);
+					}
+					case 6: {
+						pokedex[lineCounter].Attack = atoi(buffer);
+					}
+					case 7: {
+						pokedex[lineCounter].Defense = atoi(buffer);
+					}
+					case 8: {
+						pokedex[lineCounter].SpAtk = atoi(buffer);
+					}
+					case 9: {
+						pokedex[lineCounter].SpDef = atoi(buffer);
+					}
+					case 10: {
+						pokedex[lineCounter].Speed = atoi(buffer);
+					}
+					case 11: {
+						pokedex[lineCounter].Generation = atoi(buffer);
+					}
+					case 12: {
+						memcpy(pokedex[lineCounter].Legendary, buffer, MAX_LEN);
+					}
 				}
 			}
 			paramCounter++;
 		}
 	}
+	
+	double avg = 0;
+	for (int i = 0; i <= lineCounter; i++) {
+		avg += pokedex[i].Attack;
+	}
+	
+	avg /= lineCounter + 1;
+	
+	printf("%f", avg);
 	
 	fclose(file);
 	
@@ -107,7 +103,6 @@ int next_field(FILE *csv, char *buffer, int max_len) {
 	
 	bool insideQuote = false;
 	
-	// Get the next entry
 	while (!feof(csv)) {
 		c = fgetc(csv);
 		
@@ -124,4 +119,6 @@ int next_field(FILE *csv, char *buffer, int max_len) {
 		
 		if (n + 1 >= max_len) break;
 	}
+	
+	return 1;
 }
