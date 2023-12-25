@@ -1,4 +1,4 @@
-# Assignment 0 - Introduction to the Module
+# Assignment 1 - Hash Tables
 
 ## Task 1
 You should write a hash table to store the frequency of names in an (unordered) list of Irish surnames.
